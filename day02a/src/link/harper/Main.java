@@ -3,8 +3,17 @@ package link.harper;
 public class Main {
 
     public static void main(String[] args) {
-	    PasswordLine l = new PasswordLine("13-16 k: kkkkkgmkbvkkrskhd\n");
+        String[] strs = Input.GetLines();
+        Integer numValid = 0;
 
-	    System.out.println(l);
+        for(String str:  strs) {
+            PasswordLine line = new PasswordLine((str));
+
+            if (line.isValidPart2()) {
+                numValid++;
+            }
+        }
+
+        System.out.println("Number of valid passwords: " + numValid);
     }
 }

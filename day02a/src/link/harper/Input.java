@@ -3,6 +3,11 @@ package link.harper;
 public class Input {
 
 
+    public static String[] GetLines() {
+        String[] lines = RawInputString.split(System.getProperty("line.separator"));
+
+        return lines;
+    }
 
     private static String RawInputString =
             "13-16 k: kkkkkgmkbvkkrskhd\n" +

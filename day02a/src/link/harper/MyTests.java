@@ -14,7 +14,7 @@ public class MyTests {
                 "minNumOccurrences should be 13");
 
         Assertions.assertEquals(16,
-                l1.maxNumOccurences,
+                l1.maxNumOccurrences,
                 "maxNumOccurrences should be 16");
 
         Assertions.assertEquals("k",
