@@ -6,8 +6,16 @@ public class Main {
         Input input = new Input();
         input.open("input.txt");
 
+        Calculator calc = new Calculator();
+        int maxSeatId = 0;
+
         for(String line = input.line(); line != null; line = input.line()) {
-            System.out.println(line);
+            int seatId = calc.SeatId(line);
+            if (seatId > maxSeatId) {
+                maxSeatId = seatId;
+            }
         }
+
+        System.out.println("Max seat ID = " + maxSeatId);
     }
 }
