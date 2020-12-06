@@ -24,36 +24,68 @@ public class Tester {
         input.close();
     }
 
+//    @Test
+//    public void testCalculator() {
+//        Calculator c = new Calculator();
+//        List<String> data;
+//
+//        data = new ArrayList<>();
+//        data.add("abc");
+//        Assertions.assertEquals(3, c.numYesForGroup(data));
+//
+//        data = new ArrayList<>();
+//        data.add("a");
+//        data.add("b");
+//        data.add("c");
+//        Assertions.assertEquals(3, c.numYesForGroup(data));
+//
+//        data = new ArrayList<>();
+//        data.add("ab");
+//        data.add("ac");
+//        Assertions.assertEquals(3, c.numYesForGroup(data));
+//
+//        data = new ArrayList<>();
+//        data.add("a");
+//        data.add("a");
+//        data.add("a");
+//        data.add("a");
+//        Assertions.assertEquals(1, c.numYesForGroup(data));
+//
+//        data = new ArrayList<>();
+//        data.add("b");
+//        Assertions.assertEquals(1, c.numYesForGroup(data));
+//    }
+
     @Test
-    public void testCalculator() {
+    public void testCalculatorSecondCriteria() {
         Calculator c = new Calculator();
         List<String> data;
 
         data = new ArrayList<>();
         data.add("abc");
-        Assertions.assertEquals(3, c.numYesForGroup(data));
+        Assertions.assertEquals(3, c.numYesForGroupSecondCriteria(data));
 
         data = new ArrayList<>();
         data.add("a");
         data.add("b");
         data.add("c");
-        Assertions.assertEquals(3, c.numYesForGroup(data));
+        Assertions.assertEquals(0, c.numYesForGroupSecondCriteria(data));
 
         data = new ArrayList<>();
         data.add("ab");
         data.add("ac");
-        Assertions.assertEquals(3, c.numYesForGroup(data));
+        Assertions.assertEquals(1, c.numYesForGroupSecondCriteria(data));
 
         data = new ArrayList<>();
         data.add("a");
         data.add("a");
         data.add("a");
         data.add("a");
-        Assertions.assertEquals(1, c.numYesForGroup(data));
+        Assertions.assertEquals(1, c.numYesForGroupSecondCriteria(data));
 
         data = new ArrayList<>();
         data.add("b");
-        Assertions.assertEquals(1, c.numYesForGroup(data));
+        Assertions.assertEquals(1, c.numYesForGroupSecondCriteria(data));
     }
 
 }
