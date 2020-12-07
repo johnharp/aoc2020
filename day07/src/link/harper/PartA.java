@@ -12,10 +12,12 @@ public class PartA {
 
         Calculator calc = new Calculator();
 
-        List<String> group = input.group();
-        while(group != null) {
-            System.out.println(group);
-            group = input.group();
+        String line = input.line();
+        while(line != null) {
+            BagSpec.parseLine(line);
+
+            line = input.line();
+
         }
     }
 }
