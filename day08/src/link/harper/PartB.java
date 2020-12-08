@@ -7,25 +7,23 @@ import java.util.List;
 public class PartB {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Part A Answer");
+        System.out.println("Part B Answer");
         Cpu cpu = new Cpu();
         cpu.loadProgram("input.txt");
 
-        while(!cpu.isInfiniteLoopDetected() &&
-            !cpu.isProgramTerminated()) {
-            cpu.step();
-        }
 
-        if (cpu.isInfiniteLoopDetected()) {
-            System.out.println("Infinite loop detected.");
-        }
+        for (int i = 0; i<cpu.getTotalNumberOfInstructionsLoaded(); i++) {
+            cpu.toggleInstructionAt(i);
+            cpu.run();
 
-        if (cpu.isProgramTerminated()) {
-            System.out.println("Program terminated normally.");
+            if (cpu.isProgramTerminated()) {
+                System.out.print("Repair was ==> ");
+                cpu.printLine(i);
+                cpu.printState();
+                break;
+            }
+            cpu.toggleInstructionAt(i);
         }
-
-        System.out.println("\tprogram counter = " + cpu.getProgramCounter());
-        System.out.println("\taccumulator = " + cpu.getAccumulator());
 
     }
 

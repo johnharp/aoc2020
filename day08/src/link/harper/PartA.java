@@ -10,12 +10,9 @@ public class PartA {
         System.out.println("Part A Answer");
         Cpu cpu = new Cpu();
         cpu.loadProgram("input.txt");
+        cpu.run();
 
-        while(!cpu.isInfiniteLoopDetected()) {
-            cpu.step();
-        }
-
-        System.out.println("Infinite loop detected.  acc = " + cpu.getAccumulator());
+        cpu.printState();
 
     }
 

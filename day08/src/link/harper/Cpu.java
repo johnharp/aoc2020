@@ -53,8 +53,16 @@ public class Cpu {
     }
 
     public boolean isInfiniteLoopDetected() {
-        return getInstructionAt(programCounter)
+        if (isProgramTerminated()) return false;
+
+        return
+                getInstructionAt(programCounter)
                 .getHasBeenVisited();
+    }
+
+    public boolean isProgramCounterInvalid() {
+        return programCounter < 0 ||
+                programCounter > getTotalNumberOfInstructionsLoaded();
     }
 
     public boolean isProgramTerminated() {
@@ -77,7 +85,56 @@ public class Cpu {
         return changedInstruction;
     }
 
+    public void run() throws Exception{
+        setAccumulator(0);
+        setProgramCounter(0);
+
+        for(int i = 0; i<getTotalNumberOfInstructionsLoaded(); i++) {
+            Instruction inst = getInstructionAt(i);
+            inst.setHasBeenVisited(false);
+        }
+
+        while(!isProgramCounterInvalid() &&
+                !isInfiniteLoopDetected() &&
+                !isProgramTerminated()) {
+            step();
+        }
+    }
+
+    public int getTotalNumberOfInstructionsLoaded() {
+        return program.size();
+    }
+
+    public void printLine(int i) {
+        Instruction instruction = getInstructionAt(i);
+        System.out.println(i + ": " +
+                instruction.getOperation() + " " +
+                instruction.getArgument());
+    }
+
+    public void printProgram() {
+        for (int i = 0; i<getTotalNumberOfInstructionsLoaded(); i++) {
+            printLine(i);
+        }
+    }
+
+    public void printState() {
+        if (isInfiniteLoopDetected()) {
+            System.out.println("Infinite loop detected.");
+        }
+
+        if (isProgramTerminated()) {
+            System.out.println("Program terminated normally.");
+        }
+
+        System.out.println("\tprogram counter = " + getProgramCounter());
+        System.out.println("\taccumulator = " + getAccumulator());
+    }
+
     public void step() throws Exception{
+
+        if (programCounter >= getTotalNumberOfInstructionsLoaded()) return;
+
         Instruction instruction = getInstructionAt(programCounter);
         instruction.setHasBeenVisited(true);
         switch(instruction.getOperation()) {
