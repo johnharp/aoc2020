@@ -8,6 +8,7 @@ import java.util.List;
 public class Calculator {
     int[] data;
 
+
     Hashtable<Integer, Integer> differences = new Hashtable<>();
 
     public void loadInput(String filename) {
