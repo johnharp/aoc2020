@@ -3,6 +3,7 @@ package link.harper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +16,82 @@ public class CalculatorB {
 
     public ArrayList<Integer> getAllAdaptors() {
         return allAdaptors;
+    }
+
+
+    public long calcNumValidChains() {
+
+        ArrayList<Integer> start = new ArrayList<>() {
+            { add(0); }
+        };
+        ArrayList<Integer> rest = new ArrayList<>(allAdaptors);
+        int max = rest.get(rest.size()-1);
+
+        return validNum(start, rest, max);
+    }
+
+    public long validNum(
+            ArrayList<Integer> start,
+            ArrayList<Integer> rest,
+            int max
+    ) {
+        if (start.get(start.size() - 1) == max)
+        {
+            System.out.println("VALID: " + start);
+            return 1;
+        }
+
+        // If we've already applied all the adaptors, "first" is a valid chain
+        if (rest.size() == 0) {
+            System.out.println("VALID: " + start);
+            return 1;
+        }
+
+        // weird case -- start and rest should never both be empty
+        if (start.size() == 0 && rest.size() == 0) return 0;
+
+        // If "start" is empty, take the first element of "rest" and evaluate
+        if (start.size() == 0) {
+            start = new ArrayList<>();
+            start.add(rest.get(0));
+
+            rest = new ArrayList<>(rest);
+            rest.remove(0);
+
+            return validNum(start, rest, max);
+        }
+
+        // "start" is not empty, "rest" is not empty
+        // assuming all the "first" up to now is fixed (and valid so far),
+        // we want to find the next item we can move from "rest" to the end of first
+        // the item we pick can be no bigger than first+3
+        int maxStart = start.get(start.size()-1);
+        ArrayList<Integer> newRest = new ArrayList<Integer>(rest);
+        ArrayList<Integer> candidates =
+            sliceUpToValue(newRest, maxStart+3);
+
+        // No candidates in the "rest" array are small enough
+        if (candidates.size() == 0) return 0;
+
+        long num = 0;
+
+        for (int i = 0; i<candidates.size(); i++) {
+            ArrayList<Integer> tryStart = new ArrayList<>(start);
+            ArrayList<Integer> remainingCandidates = new ArrayList<>();
+            tryStart.add(candidates.get(i));
+
+            if (i+1 < candidates.size()) {
+                remainingCandidates = new ArrayList<>(
+                        candidates.subList(i+1, candidates.size())
+                );
+            }
+            ArrayList<Integer> tryRest =  remainingCandidates;
+            tryRest.addAll(newRest);
+
+            num += validNum(tryStart, tryRest, max);
+        }
+
+        return num;
     }
 
     public void loadInput(String filename) {
