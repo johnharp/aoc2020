@@ -9,14 +9,28 @@ import java.util.List;
 public class Input {
     private BufferedReader reader = null;
 
-    public void open(String name) {
+
+    private List<String> lines;
+    public List<String> getLines() {
+        return lines;
+    }
+
+    public void readAll(String name) {
         try {
             FileReader fileReader = new FileReader(name);
             reader = new BufferedReader(fileReader);
+
+            lines = new ArrayList<>();
+            String line = line();
+            while(line != null) {
+                lines.add(line);
+                line = line();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public String line() {
         String l = null;
