@@ -7,7 +7,9 @@ import java.util.List;
 
 public class Calculator {
     int[] data;
-
+    public int[] getData() {
+        return data;
+    }
 
     Hashtable<Integer, Integer> differences = new Hashtable<>();
 
@@ -36,6 +38,43 @@ public class Calculator {
         dataList.add(max + 3);
 
         data = dataList.stream().mapToInt(i -> i).toArray();
+    }
+
+    public ArrayList<Integer> getGroupSizes() {
+        ArrayList<Integer> groupSizes = new ArrayList<>();
+
+        int numInGroup = 0;
+
+        for(int i = 0; i<data.length-1; i++) {
+            if (data[i+1] - data[i] >=3) {
+                if (numInGroup > 0) {
+                    groupSizes.add(numInGroup);
+                }
+
+                numInGroup = 0;
+            } else {
+                numInGroup++;
+            }
+        }
+
+        return groupSizes;
+    }
+
+    public int numPossibilitiesInGroupSized(int size) throws Exception{
+        switch(size) {
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 3:
+                return 4;
+            case 4:
+                return 7;
+            case 5:
+                return 13;
+            default:
+                throw new Exception("Error -- ");
+        }
     }
 
     public Hashtable<Integer, Integer> summarizeDifferences() {

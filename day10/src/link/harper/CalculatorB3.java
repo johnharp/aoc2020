@@ -11,15 +11,16 @@ public class CalculatorB3 {
     private int[] data;
     public boolean[] allOn;
     public ArrayList<Integer> togglePositions;
+    public ArrayList<ArrayList<Integer>> toggleGroups;
 
 
     public int[] getData() {
         return data;
     }
 
-    public long numValidConfigurations() {
-
-        return countValidConfigurations(0, allOn.clone());
+    public long numValidConfigurations(int minIndex, int maxIndex) {
+        return 0;
+        //return countValidConfigurations(minIndex, , allOn.clone());
     }
 
     public long countValidConfigurations(int index, boolean[] isOn) {
@@ -69,6 +70,33 @@ public class CalculatorB3 {
         }
 
         return positions;
+    }
+
+    public ArrayList<ArrayList<Integer>> computeGroups() {
+        ArrayList<Integer> positions = findPositionsThatCanBeTurnedOff();
+
+        ArrayList<ArrayList<Integer>> groups = new ArrayList<>();
+        ArrayList<Integer> group = new ArrayList<>();
+        groups.add(group);
+        boolean isNewGroup = true;
+
+        for(int i = 0; i<positions.size(); i++) {
+            if (isNewGroup) {
+                group.add(positions.get(i));
+                isNewGroup = false;
+            } else {
+                if (positions.get(i) == group.get(group.size()-1)+1) {
+                    group.add(positions.get(i));
+                } else {
+                    group = new ArrayList<>();
+                    group.add(positions.get(i));
+                    groups.add(group);
+                    isNewGroup = true;
+                }
+            }
+        }
+
+        return groups;
     }
 
     public boolean validToTurnOff(int i, boolean[] isOn) {
@@ -130,6 +158,7 @@ public class CalculatorB3 {
         System.out.println("data:       " + dataList);
         initAllOn();
         togglePositions = findPositionsThatCanBeTurnedOff();
+        toggleGroups = computeGroups();
         System.out.println("can toggle: " + togglePositions);
     }
 
