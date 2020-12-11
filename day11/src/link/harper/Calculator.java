@@ -1,0 +1,43 @@
+package link.harper;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.List;
+
+public class Calculator {
+    int[] data;
+    public int[] getData() {
+        return data;
+    }
+
+    Hashtable<Integer, Integer> differences = new Hashtable<>();
+
+    public void loadInput(String filename) {
+        List<Integer> dataList = new ArrayList<>();
+
+        Input input = new Input();
+        input.open(filename);
+
+        String line = input.line();
+
+        while(line != null) {
+            int inputNum = Integer.parseInt(line);
+            dataList.add(inputNum);
+
+            line = input.line();
+        }
+
+        // seat adapter
+        dataList.add(0);
+        Collections.sort(dataList);
+
+        int max = dataList.get(dataList.size()-1);
+
+        // built-in adaptor
+        dataList.add(max + 3);
+
+        data = dataList.stream().mapToInt(i -> i).toArray();
+    }
+
+}
