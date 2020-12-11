@@ -10,19 +10,42 @@ public class GameState {
     int[][] currentState;
     int[][] nextState;
 
+    public int getNumModifiedLastStateChange() {
+        return numModifiedLastStateChange;
+    }
+
+    int numModifiedLastStateChange ;
+
+    public void setCurrentStateAt(int r, int c, int v) {
+        currentState[r][c] = v;
+    }
+
+    public int countOccupiedSeats() {
+        int sum = 0;
+
+        for (int row = 1; row <= numRows; row++) {
+            for (int col = 1; col <= numCols; col++) {
+                sum += currentState[row][col];
+            }
+        }
+
+        System.out.println("Total of " + sum + " seats occupied");
+        return sum;
+    }
 
     public void initialize(List<String> lines) {
         String firstLine = lines.get(0);
         numCols = firstLine.length();
         numRows = lines.size();
+        numModifiedLastStateChange = 0;
 
         // Give the board a margin of one space all the way around
         // This top, bottom, left, right margin will never have seats
         // or occupants and will never be calculated, but will allow
         // us to not bound check when calculating the inner spaces
-        chairs = new int[numCols+2][numRows+2];
-        currentState = new int[numCols+2][numRows+2];
-        nextState = new int[numCols+2][numRows+2];
+        chairs = new int[numRows+2][numCols+2];
+        currentState = new int[numRows+2][numCols+2];
+        nextState = new int[numRows+2][numCols+2];
 
         int row = 1;
         for(String line: lines) {
@@ -37,6 +60,65 @@ public class GameState {
 
             row++;
         }
+    }
+
+    public void computeNextState() {
+        numModifiedLastStateChange = 0;
+        for (int row = 1; row <= numRows; row++) {
+            for (int col = 1; col <= numCols; col++) {
+                if (chairs[row][col] == 1) {
+                    int oldCellValue = nextState[row][col];
+                    int newCellValue = computeCell(row, col);
+                    if (oldCellValue != newCellValue) {
+                        numModifiedLastStateChange++;
+                        nextState[row][col] = newCellValue;
+                    }
+                }
+            }
+        }
+
+        swapNextAndCurrentStates();
+    }
+
+    public void swapNextAndCurrentStates() {
+        int[][] temp;
+
+        temp = currentState;
+        currentState = nextState;
+        nextState = temp;
+    }
+
+    public void nSteps(int n) {
+        for(int i = 0; i<n; i++) {
+            computeNextState();
+        }
+    }
+
+    public int runUntilStable() {
+        int numSteps = 0;
+        numModifiedLastStateChange = Integer.MAX_VALUE;
+        while (numModifiedLastStateChange > 0) {
+            computeNextState();
+            numSteps++;
+        }
+
+        System.out.println("Became stable after " + (numSteps-1));
+        return numSteps-1;
+    }
+
+    public int computeCell(int r, int c) {
+        int currentCellState = currentState[r][c];
+        int newCellState;
+
+        int sum = currentState[r-1][c-1] + currentState[r-1][c] + currentState[r-1][c+1] +
+                currentState[r][c-1]                            + currentState[r][c+1] +
+                currentState[r+1][c-1] + currentState[r+1][c] + currentState[r+1][c+1];
+
+        if (currentCellState == 0 && sum <= 0) newCellState = 1;
+        else if (currentCellState == 1 && sum >= 4) newCellState = 0;
+        else newCellState = currentCellState;
+
+        return newCellState;
     }
 
     @Override
