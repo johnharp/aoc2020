@@ -60,11 +60,26 @@ public class Calculator {
         return groupSizes;
     }
 
-    public int numPossibilitiesInGroupSized(int size) throws Exception{
+    public int numPossibilitiesInGroupSized(int size) {
+
         switch(size) {
             case 1:
+                // One gap of size 1 means just two numbers in the group
+                // because of the 3 to either side, neither adaptor
+                // can be removed or the gap will be > 3
+                // So only one possibility: both on
+                // Delta:              3      1      3
+                // Number:      |  n-3 |  n   | n+1  |  n+4 |
+                // Group:       |      | =====+===== |      |
                 return 1;
             case 2:
+                // One gap of size 2 means just two numbers in the group
+                // because of the gap to either side, neither adaptor
+                // can be removed or the gap will be > 3
+                // So only one possibility: both on
+                // Delta:              3      1      1      3
+                // Number:      |  n-3 |  n   | n+1  |  n+2 | n+5  |
+                // Group:       |      +======+======+======+      |
                 return 2;
             case 3:
                 return 4;
@@ -73,7 +88,7 @@ public class Calculator {
             case 5:
                 return 13;
             default:
-                throw new Exception("Error -- ");
+                return 0;
         }
     }
 
