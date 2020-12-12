@@ -1,5 +1,7 @@
 package link.harper;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 
 public class GameState {
@@ -62,13 +64,17 @@ public class GameState {
         }
     }
 
-    public void computeNextState() {
+    public void computeNextState(boolean isPart2) {
         numModifiedLastStateChange = 0;
         for (int row = 1; row <= numRows; row++) {
             for (int col = 1; col <= numCols; col++) {
                 if (chairs[row][col] == 1) {
                     int oldCellValue = nextState[row][col];
-                    int newCellValue = computeCell(row, col);
+                    int newCellValue;
+
+                    if (isPart2) newCellValue  = computeCellPart2(row, col);
+                    else newCellValue = computeCell(row, col);
+
                     if (oldCellValue != newCellValue) {
                         numModifiedLastStateChange++;
                         nextState[row][col] = newCellValue;
@@ -88,17 +94,11 @@ public class GameState {
         nextState = temp;
     }
 
-    public void nSteps(int n) {
-        for(int i = 0; i<n; i++) {
-            computeNextState();
-        }
-    }
-
-    public int runUntilStable() {
+    public int runUntilStable(boolean isPart2) {
         int numSteps = 0;
         numModifiedLastStateChange = Integer.MAX_VALUE;
         while (numModifiedLastStateChange > 0) {
-            computeNextState();
+            computeNextState(isPart2);
             numSteps++;
         }
 
@@ -119,6 +119,47 @@ public class GameState {
         else newCellState = currentCellState;
 
         return newCellState;
+    }
+
+    public int computeCellPart2(int r, int c) {
+        int currentCellState = currentState[r][c];
+        int newCellState;
+
+        int sum = 0;
+        sum += countVisiblePeople(r, c, -1, -1);
+        sum += countVisiblePeople(r, c, -1, 0);
+        sum += countVisiblePeople(r, c, -1, 1);
+        sum += countVisiblePeople(r, c, 0, 1);
+        sum += countVisiblePeople(r, c, 1, 1);
+        sum += countVisiblePeople(r, c, 1, 0);
+        sum += countVisiblePeople(r, c, 1, -1);
+        sum += countVisiblePeople(r, c, 0, -1);
+
+
+        if (currentCellState == 0 && sum <= 0) newCellState = 1;
+        else if (currentCellState == 1 && sum >= 5) newCellState = 0;
+        else newCellState = currentCellState;
+
+        return newCellState;
+    }
+
+
+    public int countVisiblePeople(int startRow, int startCol, int deltaRow, int deltaCol) {
+        int r = startRow + deltaRow;
+        int c = startCol + deltaCol;
+
+        while (r >= 1 && r <= numRows && c >=1 && c <= numCols) {
+            if (chairs[r][c] == 1 && currentState[r][c]==0) {
+                // empty chair we can't see past
+                return 0;
+            }
+            if (currentState[r][c] == 1) {
+                return 1;
+            }
+            r += deltaRow;
+            c += deltaCol;
+        }
+        return 0;
     }
 
     @Override
