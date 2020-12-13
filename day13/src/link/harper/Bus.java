@@ -3,6 +3,16 @@ package link.harper;
 public class Bus {
     private long busId;
     private long index;
+    private long firstValidTime;
+
+    public long getFirstValidTime() {
+        return firstValidTime;
+    }
+
+    public void setFirstValidTime(long firstValidTime) {
+        this.firstValidTime = firstValidTime;
+    }
+
 
     public long getBusId() {
         return busId;
@@ -33,7 +43,7 @@ public class Bus {
 
     @Override
     public String toString() {
-        return "Bus " + busId + " at index " + index;
+        return "Bus " + busId + " at index " + index + " is first valid at t = " + firstValidTime;
     }
 
 

@@ -5,25 +5,18 @@ public class Part2 {
         System.out.println("Part B Answer");
 
         Calculator2 calc = new Calculator2();
-        //calc.loadInput("example6-input.txt");
         calc.loadInput("input.txt");
 
-
-        long t = 1;
-        for(Bus bus: calc.getBuses()) {
-            t *= bus.getBusId();
-            System.out.println(bus);
+        Bus b1 = calc.getBus(0);
+        for(int i=1; i<calc.getBuses().size(); i++) {
+            Bus b2 = calc.getBus(i);
+            System.out.println(b2);
+            System.out.println("step = " + b1.getBusId()*b2.getBusId());
         }
 
-        System.out.println(t);
+        calc.go();
 
-//        long t = calc.getFirstTimeToTry();
-//        while (!calc.allBusesValidAtTime(t)) {
-//            System.out.println(t);
-//            t += calc.getLargestBusId();
-//        }
-//        System.out.println("Solution: " + t);
-        //100000000000000
-        //105771058159
+
+
     }
 }
