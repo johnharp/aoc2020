@@ -11,6 +11,8 @@ public class Part1 {
 
     public static void main(String[] args) throws Exception{
         Input in = new Input("example1-input.txt");
+        Computer comp = new Computer();
+
         for(String line : in.getLines()) {
             Matcher maskMatcher = maskPattern.matcher(line);
             Matcher memMatcher = memPattern.matcher(line);
@@ -24,6 +26,11 @@ public class Part1 {
                 throw new Exception("Unknown input found: " + line);
             }
         }
+
+        comp.write(8, 11);
+        comp.write(7, 15);
+        comp.coredump();
+
     }
 
 }
