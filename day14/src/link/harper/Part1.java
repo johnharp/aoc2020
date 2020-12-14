@@ -7,30 +7,39 @@ import java.util.regex.Pattern;
 
 public class Part1 {
     private static Pattern maskPattern = Pattern.compile("^mask = ([01X]+)$");
-    private static Pattern memPattern = Pattern.compile("^mem\\[([0-9])+\\] = ([0-9]+)$");
+    private static Pattern memPattern = Pattern.compile("^mem\\[([0-9]+)\\] = ([0-9]+)$");
+
+    private static long thirtySixOnesMask = 68719476735L;
 
     public static void main(String[] args) throws Exception{
-        Input in = new Input("example1-input.txt");
+        //Input in = new Input("example1-input.txt");
+        Input in = new Input("input.txt");
+
         Computer comp = new Computer();
+        Mask mask = new Mask("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
         for(String line : in.getLines()) {
             Matcher maskMatcher = maskPattern.matcher(line);
             Matcher memMatcher = memPattern.matcher(line);
 
             if (maskMatcher.find()) {
-                System.out.println("Set mask to " + maskMatcher.group(1));
+                mask = new Mask(maskMatcher.group(1));
             } else if (memMatcher.find()) {
-                System.out.println("Set mem at [" + memMatcher.group(1) +
-                        "] to " + memMatcher.group(2));
+                long addr = Long.parseLong(memMatcher.group(1));
+                long value = Long.parseLong(memMatcher.group(2));
+
+                long maskedValue = mask.apply(value);
+                comp.write(addr, maskedValue);
             } else {
                 throw new Exception("Unknown input found: " + line);
             }
         }
 
-        comp.write(8, 11);
-        comp.write(7, 15);
         comp.coredump();
 
+        long sum = comp.sumAllMemory();
+
+        System.out.println("Sum of memory = " + sum);
     }
 
 }

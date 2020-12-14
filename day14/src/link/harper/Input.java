@@ -21,7 +21,7 @@ public class Input {
     private void load(String filename) throws FileNotFoundException {
         // https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html
         Scanner scanner = new Scanner(
-                new File("example1-input.txt"));
+                new File(filename));
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
