@@ -47,4 +47,18 @@ public class TestMask {
         Assertions.assertEquals(53389920588L,
                 value);
     }
+
+    @Test
+    public void test26867() throws Exception {
+        String maskStr = "0X000001111001010X1011100100001X0X0X";
+        // value is                              1100001011100
+        // masked value   000000011110010100101110010000110100
+
+        long value = 6236;
+        Mask m = new Mask(maskStr);
+        value = m.apply(value);
+
+        Assertions.assertEquals(508748852,
+                value);
+    }
 }

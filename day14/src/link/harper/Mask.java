@@ -16,7 +16,6 @@ public class Mask {
 
         String str = padLeftChar(maskStr, numBits, '0');
 
-        System.out.println("Padded str: " + str);
         char[] characters = str.toCharArray();
         for(int i = characters.length - 1; i >= 0; i--) {
 

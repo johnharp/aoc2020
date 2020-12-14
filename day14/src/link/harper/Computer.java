@@ -3,6 +3,10 @@ package link.harper;
 import java.util.Hashtable;
 
 public class Computer {
+    public Hashtable<Long, Long> getMemory() {
+        return memory;
+    }
+
     private Hashtable<Long, Long> memory = new Hashtable<>();
     private static long thirtySixOnesMask = 68719476735L;
     public static long maxNumber = thirtySixOnesMask;
@@ -21,7 +25,11 @@ public class Computer {
         if (address > thirtySixOnesMask) throw new Exception("address overflow: " + address);
         if (value > thirtySixOnesMask) throw new Exception("value overflow: " + value);
 
-        System.out.println("writing to address: " + address + "   value: " + value);
+        if (memory.keySet().contains(address)) {
+            System.out.println(
+                    "Overwriting address " + address + " old " + read(address)
+                            + " new " + value);
+        }
         memory.put(address, value);
     }
 
@@ -38,11 +46,11 @@ public class Computer {
 
         for(long key: memory.keySet()) {
             long v = memory.get(key);
-            v = v & thirtySixOnesMask;
+            //v = v & thirtySixOnesMask;
 
             sum += v;
 
-            sum = sum & thirtySixOnesMask;
+            //sum = sum & thirtySixOnesMask;
         }
 
         return sum;

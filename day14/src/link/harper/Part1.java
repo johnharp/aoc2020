@@ -15,6 +15,9 @@ public class Part1 {
         //Input in = new Input("example1-input.txt");
         Input in = new Input("input.txt");
 
+        long totalmasks = 0;
+        long totalwrites = 0;
+
         Computer comp = new Computer();
         Mask mask = new Mask("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
@@ -24,12 +27,14 @@ public class Part1 {
 
             if (maskMatcher.find()) {
                 mask = new Mask(maskMatcher.group(1));
+                totalmasks++;
             } else if (memMatcher.find()) {
                 long addr = Long.parseLong(memMatcher.group(1));
                 long value = Long.parseLong(memMatcher.group(2));
 
                 long maskedValue = mask.apply(value);
                 comp.write(addr, maskedValue);
+                totalwrites++;
             } else {
                 throw new Exception("Unknown input found: " + line);
             }
@@ -39,7 +44,11 @@ public class Part1 {
 
         long sum = comp.sumAllMemory();
 
+        System.out.println("total masks " + totalmasks);
+        System.out.println("total writes " + totalwrites);
         System.out.println("Sum of memory = " + sum);
+
+        System.out.println("total memory spots = " + comp.getMemory().keySet().size());
     }
 
 }
