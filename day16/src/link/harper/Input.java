@@ -1,6 +1,8 @@
 package link.harper;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +15,7 @@ public class Input {
         String nearbyTicketsFile = prefix + "-nearby.txt";
 
         loadRules(rulesFile);
+        loadTickets(nearbyTicketsFile);
     }
 
     private void loadRules(String rulesFile) throws Exception{
@@ -31,7 +34,6 @@ public class Input {
                 int max2 = Integer.parseInt(ruleMatcher.group(5));
 
                 Rule r = new Rule(fieldName, min1, max1, min2, max2);
-                System.out.println(r);
 
             } else {
                 throw new Exception("un-parsable rule: '" + line + "'");
@@ -39,4 +41,21 @@ public class Input {
 
         }
     }
+
+    private List<Ticket> loadTickets(String ticketFile) throws Exception{
+        ArrayList<Ticket> tickets = new ArrayList<>();
+
+        Scanner scanner = new Scanner(
+                new File(ticketFile));
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            Ticket t = new Ticket(line);
+            tickets.add(t);
+        }
+
+        return tickets;
+    }
+
+
 }
