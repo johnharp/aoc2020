@@ -25,14 +25,14 @@ public class Input {
 
             if (ruleMatcher.find()) {
                 String fieldName = ruleMatcher.group(1);
-                String rangeStart1 = ruleMatcher.group(2);
-                String rangeEnd1 = ruleMatcher.group(3);
-                String rangeStart2 = ruleMatcher.group(4);
-                String rangeEnd2 = ruleMatcher.group(5);
+                int min1 = Integer.parseInt(ruleMatcher.group(2));
+                int max1  = Integer.parseInt(ruleMatcher.group(3));
+                int min2 = Integer.parseInt(ruleMatcher.group(4));
+                int max2 = Integer.parseInt(ruleMatcher.group(5));
 
-                System.out.println("field '" + fieldName + "' " +
-                        "can be from " + rangeStart1 + " to " + rangeEnd1 +
-                        " or can be from " + rangeStart2 + " to " + rangeEnd2);
+                Rule r = new Rule(fieldName, min1, max1, min2, max2);
+                System.out.println(r);
+
             } else {
                 throw new Exception("un-parsable rule: '" + line + "'");
             }

@@ -13,4 +13,15 @@ public class Range {
         return min <= n &&
                 max >= n;
     }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        sb.append(min);
+        sb.append(",");
+        sb.append(max);
+        sb.append("]");
+        return sb.toString();
+    }
 }

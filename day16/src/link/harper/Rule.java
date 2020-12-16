@@ -9,9 +9,13 @@ public class Rule {
     private Range range1;
     private Range range2;
 
-    private Hashtable<Integer, List<Rule>> ruleIndex = new Hashtable<>();
+    private static Hashtable<Integer, List<Rule>> ruleIndex = new Hashtable<>();
     // the number of fields = the number of rules
     private static int numRules = 0;
+
+    public static List<Rule> getRulesValidFor(int n) {
+        return ruleIndex.get(n);
+    }
 
     public boolean contains(int n) {
         return range1.contains(n) ||
@@ -44,5 +48,16 @@ public class Rule {
         }
 
         validRules.add(this);
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(fieldName);
+        sb.append(" = ");
+        sb.append(range1);
+        sb.append(" ");
+        sb.append(range2);
+        return sb.toString();
     }
 }
