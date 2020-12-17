@@ -1,5 +1,6 @@
 package link.harper;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,33 +13,19 @@ public class Part2 {
         int numFields = in.getMyTicket().fieldValues.length;
         int numTickets = Ticket.getAllTickets().size();
 
-        FieldRule.printAll();
+        for (int ticketNum = 0; ticketNum < numTickets; ticketNum++) {
+            for (int position = 0; position < numFields; position++) {
+                int value = Ticket.getValueTicketField(ticketNum, position);
 
-        // outer list is the field position
-        // inner list is the list of possible field that could be that position
-        ArrayList<ArrayList<Integer>> solution = new ArrayList<>();
 
-        for (int fieldPosition = 0; fieldPosition < numFields; fieldPosition++) {
-            ArrayList<Integer> possibles = new ArrayList<>();
-            solution.add(possibles);
+                ArrayList<Integer> valid = FieldRule.getFieldsValidFor(value);
+                ArrayList<Integer> notValid = FieldRule.getFieldsNotValidFor(value);
 
-            for (int i = 0; i<numFields; i++) {
-                possibles.add(i);
-            }
-
-            for (int ticketNum = 0; ticketNum < numTickets; ticketNum++) {
-                int val = Ticket.getValueTicketField(0, 0);
-                ArrayList<Integer> invalid = FieldRule.getFieldsNotValidFor(val);
-                System.out.println("invalid: " + invalid);
-                for (int num: invalid) {
-                    if (possibles.contains(num)) {
-                        possibles.remove(num);
-                    }
+                if (notValid.size() > 0) {
+                    System.out.println("Ticket " + ticketNum + " has value " + value + " in field position " + position +
+                            " so it can't be these fields: " + notValid);
                 }
             }
         }
-
-
-        System.out.println(solution);
     }
 }

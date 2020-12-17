@@ -21,10 +21,11 @@ public class FieldRule {
 
     public static ArrayList<Integer> getFieldsValidFor(int n) {
         ArrayList<Integer> fieldNums = new ArrayList<>();
-        for (FieldRule rule: ruleIndex.get(n)) {
-            fieldNums.add(rule.fieldNum);
+        if (ruleIndex.containsKey(n)) {
+            for (FieldRule rule : ruleIndex.get(n)) {
+                fieldNums.add(rule.fieldNum);
+            }
         }
-
         Collections.sort(fieldNums);
         return fieldNums;
     }
