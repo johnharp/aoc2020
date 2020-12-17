@@ -7,6 +7,10 @@ import java.util.List;
 public class Ticket {
     int[] fieldValues;
 
+    public static int getValueTicketField(int ticketNum, int fieldNum) {
+        Ticket t = allTickets.get(ticketNum);
+        return t.fieldValues[fieldNum];
+    }
     private static ArrayList<Ticket> allTickets = new ArrayList<>();
 
     public static ArrayList<Ticket> getAllTickets() {
