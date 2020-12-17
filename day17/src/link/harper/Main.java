@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) throws Exception{
         Universe uni = new Universe();
         Scanner scanner = new Scanner(
-                new File("example-input.txt"));
+                new File("input.txt"));
 
         int z = 0;
         int y = 0;
