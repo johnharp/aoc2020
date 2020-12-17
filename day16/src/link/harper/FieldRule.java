@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class FieldRule {
-    private String fieldName;
+    public String fieldName;
     public int fieldNum;
     private Range range1;
     private Range range2;

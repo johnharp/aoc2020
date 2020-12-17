@@ -6,6 +6,8 @@ import java.util.List;
 
 public class Ticket {
     int[] fieldValues;
+    public int ticketNum;
+    public static int numTickets = 0;
 
     public static int getValueTicketField(int ticketNum, int fieldNum) {
         Ticket t = allTickets.get(ticketNum);
@@ -39,11 +41,13 @@ public class Ticket {
     }
 
     public Ticket(String fieldValuesStr) {
+        ticketNum = numTickets;
         fieldValues = Arrays.stream(fieldValuesStr.split(","))
                 .mapToInt(Integer::parseInt)
                 .toArray();
 
         allTickets.add(this);
+        numTickets++;
     }
 
 
