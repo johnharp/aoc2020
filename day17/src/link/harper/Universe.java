@@ -56,6 +56,9 @@ public class Universe {
 
     public Extent measureExtent() {
         Extent ext = new Extent();
+        if (cubes.keySet().size() == 0) {
+            return ext;
+        }
         ext.minX = Collections.min(cubes.keySet());
         ext.maxX = Collections.max(cubes.keySet());
 
@@ -80,7 +83,7 @@ public class Universe {
                 int maxZInSlice = Collections.max(ySlice.keySet());
 
                 if (minZInSlice < ext.minZ) ext.minZ = minZInSlice;
-                if (maxZInSlice > ext.maxY) ext.maxZ = maxZInSlice;
+                if (maxZInSlice > ext.maxZ) ext.maxZ = maxZInSlice;
 
                 for (int z = ext.minZ; z <= ext.maxZ; z++) {
                     if (ySlice.containsKey(z)) ext.count++;
@@ -90,6 +93,60 @@ public class Universe {
         }
 
         return ext;
+    }
+    public void expand() {
+        Extent ext = measureExtent();
+        set(ext.minX-1, ext.minY-1, ext.minZ-1, false);
+        set(ext.maxX+1, ext.maxY+1, ext.maxZ+1, false);
+    }
+
+    public Universe step() {
+        expand();
+        Extent ext = measureExtent();
+
+        Universe uni = new Universe();
+
+        for (int x = ext.minX; x <= ext.maxX; x++) {
+            for (int y = ext.minY; y <= ext.maxY; y++) {
+                for (int z = ext.minZ; z <= ext.maxZ; z++ ) {
+                    int sum = numNeighbors(x, y, z);
+
+                    // if the cell is alive
+                    if (get(x, y, z)) {
+                        // and if the cell has 2 or 3 neighbors
+                        if (sum >= 2 && sum <= 3) {
+                            // then it stays alive
+                            uni.set(x, y, z, true);
+
+                        }
+                    } else { // else if the cell is inactive
+                        if (sum == 3) {
+                            // and it has 3 neighbors
+                            // ... then it becomes alive
+                            uni.set(x, y, z, true);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return uni;
+    }
+
+    public int numNeighbors(int x, int y, int z) {
+        int sum = 0;
+        for (int dx = -1; dx <= 1; dx ++) {
+            for (int dy = -1; dy <= 1; dy ++) {
+                for (int dz = -1; dz <= 1; dz ++) {
+                    if (!(dx == 0 && dy == 0 && dz == 0)) {
+                        if (get(x + dx, y + dy, z + dz)) sum++;
+                    }
+                }
+            }
+        }
+
+        return sum;
     }
 
     @Override
@@ -110,6 +167,7 @@ public class Universe {
                 }
                 sb.append(System.lineSeparator());
             }
+            sb.append(System.lineSeparator());
         }
 
         return sb.toString();
