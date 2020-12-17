@@ -4,25 +4,26 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-public class Rule {
+public class FieldRule {
     private String fieldName;
     private Range range1;
     private Range range2;
 
-    private static Hashtable<Integer, List<Rule>> ruleIndex = new Hashtable<>();
+    private static Hashtable<Integer, List<FieldRule>> ruleIndex = new Hashtable<>();
     // the number of fields = the number of rules
     private static int numRules = 0;
 
-    public static List<Rule> getRulesValidFor(int n) {
+    public static List<FieldRule> getFieldRulesValidFor(int n) {
         return ruleIndex.get(n);
     }
+
 
     public boolean contains(int n) {
         return range1.contains(n) ||
                 range2.contains(n);
     }
 
-    public Rule(String name, int min1, int max1, int min2, int max2) {
+    public FieldRule(String name, int min1, int max1, int min2, int max2) {
         fieldName = name;
         range1 = new Range(min1, max1);
         range2 = new Range(min2, max2);
@@ -39,15 +40,15 @@ public class Rule {
 
     private void addToIndex(int n)
     {
-        List<Rule> validRules;
+        List<FieldRule> validFieldRules;
         if (ruleIndex.containsKey(n)) {
-            validRules = ruleIndex.get(n);
+            validFieldRules = ruleIndex.get(n);
         } else {
-            validRules = new ArrayList<>();
-            ruleIndex.put(n, validRules);
+            validFieldRules = new ArrayList<>();
+            ruleIndex.put(n, validFieldRules);
         }
 
-        validRules.add(this);
+        validFieldRules.add(this);
     }
 
     @Override

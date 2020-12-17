@@ -1,12 +1,10 @@
 package link.harper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Part1 {
     public static void main(String[] args) throws Exception {
-        //Input in = new Input("example1-input.txt");
         Input in = new Input();
         in.load("puzzle");
 
@@ -16,8 +14,8 @@ public class Part1 {
         for(Ticket t: Ticket.getAllTickets()) {
             boolean isValid = true;
             for(int fieldValue: t.fieldValues) {
-                List<Rule> rules = Rule.getRulesValidFor(fieldValue);
-                if (rules == null || rules.size() == 0) {
+                List<FieldRule> fieldRules = FieldRule.getFieldRulesValidFor(fieldValue);
+                if (fieldRules == null || fieldRules.size() == 0) {
                     isValid = false;
                     invalidFieldValues.add(fieldValue);
                 }
