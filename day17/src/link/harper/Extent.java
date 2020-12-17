@@ -10,6 +10,15 @@ public class Extent {
 
     int count = 0;
 
+    public void expand() {
+        minX--;
+        maxX++;
+        minY--;
+        maxY++;
+        minZ--;
+        maxZ++;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

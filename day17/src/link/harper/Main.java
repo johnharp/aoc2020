@@ -11,9 +11,9 @@ public class Main {
                 new File("example-input.txt"));
 
         int z = 0;
-        int y = 1;
+        int y = 0;
         while (scanner.hasNextLine()) {
-            int x = -1;
+            int x = 0;
             String line = scanner.nextLine();
             char[] chars = line.toCharArray();
             for(char c: chars) {
@@ -25,6 +25,9 @@ public class Main {
             y--;
         }
 
-        System.out.println(uni.measureExtent());
+        System.out.println("Before any cycles:");
+        System.out.println();
+        System.out.println(uni);
+
     }
 }

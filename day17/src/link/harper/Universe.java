@@ -91,4 +91,27 @@ public class Universe {
 
         return ext;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Extent ext = measureExtent();
+
+        for (int z = ext.minZ; z<= ext.maxZ; z++) {
+            sb.append("z=" + z);
+            sb.append(System.lineSeparator());
+            for (int y = ext.maxY; y >= ext.minY; y--) {
+                for (int x = ext.minX; x <= ext.maxX; x++) {
+                    if (get(x, y, z)) {
+                        sb.append('#');
+                    } else {
+                        sb.append('.');
+                    }
+                }
+                sb.append(System.lineSeparator());
+            }
+        }
+
+        return sb.toString();
+    }
 }
