@@ -19,27 +19,27 @@ public class Main {
             char[] chars = line.toCharArray();
             for(char c: chars) {
                 if (c == '#') {
-                    uni.set(x, y, z, true);
+                    uni.set(x, y, z, w,true);
                 }
                 x++;
             }
             y--;
         }
 
-//
-//        System.out.println("Before any cycles:");
-//        System.out.println();
-//        System.out.println(uni);
-//
-//        for (int i = 0; i<6; i++) {
-//            System.out.println("After " + (i + 1) + " cycles:");
-//            System.out.println();
-//            uni = uni.step();
-//            System.out.println(uni);
-//        }
-//
-//        Extent ext = uni.measureExtent();
-//        System.out.println(ext.count + " cubes active");
+
+        System.out.println("Before any cycles:");
+        System.out.println();
+        System.out.println(uni);
+
+        for (int i = 0; i<6; i++) {
+            System.out.println("After " + (i + 1) + " cycles:");
+            System.out.println();
+            uni = uni.step();
+            System.out.println(uni);
+        }
+
+        Extent ext = uni.measureExtent();
+        System.out.println(ext.count + " cubes active");
 
 
     }
