@@ -2,7 +2,9 @@ package link.harper;
 
 import javax.management.relation.Role;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,11 +12,19 @@ public class Rule {
     private static Hashtable<Integer, Rule> ruleIndex =
             new Hashtable<>();
 
+    public static Set<Integer> getRuleNumbers() {
+        return ruleIndex.keySet();
+    }
+
+    public static Rule get(Integer ruleNum) {
+        return ruleIndex.get(ruleNum);
+    }
+
     private final static Pattern rootPattern = Pattern.compile("^([0-9]+): \"([a-z])\"");
     private final static Pattern singlePattern =
-            Pattern.compile("^([0-9]+): ([0-9]+) ([0-9]+)$");
+            Pattern.compile("^([0-9]+): ([0-9]+(?: [0-9]+)*)$");
     private final static Pattern doublePattern =
-            Pattern.compile("^([0-9]+): ([0-9]+) ([0-9]+) | ([0-9]+) ([0-9]+)$");
+            Pattern.compile("^([0-9]+): ([0-9]+(?: [0-9]+)* \\| [0-9]+(?: [0-9]+)*)$");
 
     private int num;
     private String rootValid;
@@ -33,28 +43,45 @@ public class Rule {
             rootValid = m0.group(2);
         } else if (m1.find()) {
             num = Integer.parseInt(m1.group(1));
-
             ArrayList<Integer> group1 = new ArrayList<>();
-            group1.add(Integer.parseInt(m1.group(2)));
-            group1.add(Integer.parseInt(m1.group(3)));
 
+            String[] split1 = m1.group(2).split(" " );
+
+
+            for(int i =0; i<split1.length; i++) {
+                Integer val = Integer.parseInt(split1[i]);
+                group1.add(val);
+            }
             subGroups.add(group1);
 
         } else if (m2.find()) {
             num = Integer.parseInt(m2.group(1));
+            String[] split1 = m2.group(2).split(" \\| " );
 
-            ArrayList<Integer> group1 = new ArrayList<>();
-            group1.add(Integer.parseInt(m2.group(2)));
-            group1.add(Integer.parseInt(m2.group(3)));
+            for (int i = 0; i<split1.length; i++) {
+                ArrayList<Integer> group = new ArrayList<>();
 
-            subGroups.add(group1);
+                String grpline = split1[i];
 
-            m2.ma
-            ArrayList<Integer> group2 = new ArrayList<>();
-            group1.add(Integer.parseInt(m2.group(4)));
-            group1.add(Integer.parseInt(m2.group(5)));
+                String[] split2 = grpline.split(" ");
+                for(int j =0; j<split2.length; j++) {
+                    Integer val = Integer.parseInt(split2[j]);
+                    group.add(val);
+                }
+                subGroups.add(group);
+            }
 
-            subGroups.add(group2);
+//            ArrayList<Integer> group1 = new ArrayList<>();
+//            group1.add(Integer.parseInt(m2.group(2)));
+//            group1.add(Integer.parseInt(m2.group(3)));
+//
+//            subGroups.add(group1);
+//
+//            ArrayList<Integer> group2 = new ArrayList<>();
+//            group1.add(Integer.parseInt(m2.group(4)));
+//            group1.add(Integer.parseInt(m2.group(5)));
+//
+//            subGroups.add(group2);
         } else {
             throw new Exception("Unknown rule pattern: " + str);
         }
