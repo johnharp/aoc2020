@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 
 public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         Input in = new Input("example-input.txt");
 
 
