@@ -5,13 +5,12 @@ import java.io.FileNotFoundException;
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
-        Input in = new Input("input.txt");
+        Input in = new Input("example-input.txt");
 
-        System.out.println("----");
-        System.out.println(in.getRules());
-        System.out.println("----");
-        System.out.println(in.getMessages());
-        System.out.println("----");
 
+        for (String line: in.getRuleLines()) {
+            Rule r = new Rule(line);
+            System.out.println(r);
+        }
     }
 }

@@ -6,20 +6,20 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Input {
-    private ArrayList<String> rules;
-    private ArrayList<String> messages;
+    private ArrayList<String> ruleLines;
+    private ArrayList<String> messageLines;
 
-    public ArrayList<String> getRules() {
-        return rules;
+    public ArrayList<String> getRuleLines() {
+        return ruleLines;
     }
 
-    public ArrayList<String> getMessages() {
-        return messages;
+    public ArrayList<String> getMessageLines() {
+        return messageLines;
     }
 
     public Input(String filename) throws FileNotFoundException {
-        rules = new ArrayList<>();
-        messages = new ArrayList<>();
+        ruleLines = new ArrayList<>();
+        messageLines = new ArrayList<>();
 
         Scanner scanner = new Scanner(
                 new File(filename));
@@ -29,12 +29,12 @@ public class Input {
             if (line.equals("")) {
                 break;
             }
-            rules.add(line);
+            ruleLines.add(line);
         }
 
         while(scanner.hasNext()) {
             String line = scanner.nextLine();
-            messages.add(line);
+            messageLines.add(line);
         }
     }
 }
