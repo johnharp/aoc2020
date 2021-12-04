@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
         Scanner scanner = new Scanner(
-                new File("input.txt"));
+                new File("example-input.txt"));
 
         Long sum = 0L;
         while(scanner.hasNext()) {

@@ -1,10 +1,9 @@
 package link.harper;
 
+import org.junit.jupiter.api.Test;
+
 import javax.management.relation.Role;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +23,7 @@ public class Rule {
     private final static Pattern singlePattern =
             Pattern.compile("^([0-9]+): ([0-9]+(?: [0-9]+)*)$");
     private final static Pattern doublePattern =
-            Pattern.compile("^([0-9]+): ([0-9]+(?: [0-9]+)* \\| [0-9]+(?: [0-9]+)*)$");
+            Pattern.compile("^([0-9]+): ([0-9]+(?: [0-9]+)* \\| [0-9]+(?: [0-9]+)*)");
 
     private int num;
     private String rootValid;
@@ -56,8 +55,10 @@ public class Rule {
 
         } else if (m2.find()) {
             num = Integer.parseInt(m2.group(1));
-            String[] split1 = m2.group(2).split(" \\| " );
 
+            String[] split0 = str.split(":");
+
+            String[] split1 = split0[1].split(" \\| " );
             for (int i = 0; i<split1.length; i++) {
                 ArrayList<Integer> group = new ArrayList<>();
 
@@ -65,23 +66,12 @@ public class Rule {
 
                 String[] split2 = grpline.split(" ");
                 for(int j =0; j<split2.length; j++) {
+                    if (split2[j].equals("")) continue;
                     Integer val = Integer.parseInt(split2[j]);
                     group.add(val);
                 }
                 subGroups.add(group);
             }
-
-//            ArrayList<Integer> group1 = new ArrayList<>();
-//            group1.add(Integer.parseInt(m2.group(2)));
-//            group1.add(Integer.parseInt(m2.group(3)));
-//
-//            subGroups.add(group1);
-//
-//            ArrayList<Integer> group2 = new ArrayList<>();
-//            group1.add(Integer.parseInt(m2.group(4)));
-//            group1.add(Integer.parseInt(m2.group(5)));
-//
-//            subGroups.add(group2);
         } else {
             throw new Exception("Unknown rule pattern: " + str);
         }
@@ -89,18 +79,59 @@ public class Rule {
         ruleIndex.put(num, this);
     }
 
+    /**
+     *
+     * @param msg
+     * @return
+     * "X" not valid
+     * "" valid and consumed everything
+     * "...anything else..." valid and some left
+     */
+    public String isValid(String msg) {
+        if (rootValid != null) {
+            if (msg.startsWith(rootValid)) {
+                msg = msg.replaceFirst(rootValid, "");
+                return msg;
+            } else {
+                return "X";
+            }
+        }
+
+        for(ArrayList<Integer> group : subGroups) {
+            String groupmsg = msg;
+
+            for (int i = 0; i<group.size(); i++) {
+                Integer num = group.get(i);
+                Rule r = Rule.get(num);
+                groupmsg = r.isValid(groupmsg);
+
+                if (groupmsg.equals("X")) return "X";
+            }
+
+        }
+        return false;
+    }
+
+    public boolean groupIsValid(ArrayList<Integer> ids, String msg) {
+
+    }
+
     public ArrayList<String> getValids() {
         ArrayList<String> valids = new ArrayList<>();
         if (rootValid == null) {
             for (ArrayList<Integer> subGroup: subGroups) {
-                StringBuilder sb = new StringBuilder();
-                for (Integer ruleNum: subGroup) {
-                    Rule sub = ruleIndex.get(ruleNum);
-                    for (String v: sub.getValids()) {
-                        sb.append(v);
-                    }
+                for (String valid: getValidsForSubGroup(subGroup)) {
+                    valids.add(valid);
                 }
-                valids.add(sb.toString());
+
+//                StringBuilder sb = new StringBuilder();
+//                for (Integer ruleNum: subGroup) {
+//                    Rule sub = ruleIndex.get(ruleNum);
+//                    for (String v: sub.getValids()) {
+//                        sb.append(v);
+//                    }
+//                }
+//                valids.add(sb.toString());
             }
         } else {
             valids.add(rootValid);
@@ -109,13 +140,66 @@ public class Rule {
         return valids;
     }
 
+    private ArrayList<String> getValidsForSubGroup(ArrayList<Integer> groupList) {
+
+        ArrayList<ArrayList<String>> preResult = new ArrayList<>();
+
+        for (Integer ruleid: groupList) {
+            Rule rule = get(ruleid);
+            ArrayList<String> ruleValids = rule.getValids();
+            preResult.add(ruleValids);
+        }
+
+        while (preResult.size() > 1) {
+            ArrayList<String> combined = permuteTwo(preResult.get(0), preResult.get(1));
+            preResult.set(0, combined);
+            preResult.remove(1);
+        }
+
+        return preResult.get(0);
+    }
+
+    public static ArrayList<String> permuteTwo(ArrayList<String> first, ArrayList<String> second) {
+        ArrayList<String> result = new ArrayList<>();
+        for (int i = 0; i<first.size(); i++) {
+            for (int j = 0; j< second.size(); j++) {
+                String s = first.get(i) + second.get(j);
+                result.add(s);
+            }
+        }
+        return result;
+    }
+
+    public Set<Integer> uniqueRuleIds() {
+        Set<Integer> ids = new HashSet<>();
+
+        if (rootValid != null) {
+            ids.add(num);
+        } else {
+            for (ArrayList<Integer> groupList: subGroups) {
+                for (Integer id: groupList) {
+                    Rule r = Rule.get(id);
+                    Set<Integer> moreIds = r.uniqueRuleIds();
+                    ids.add(id);
+                    ids.addAll(moreIds);
+                }
+            }
+        }
+
+        return ids;
+    }
+
     @Override
     public String toString() {
-       StringBuilder sb = new StringBuilder();
-       sb.append(num);
-       sb.append(": ");
-       sb.append(getValids());
+        Set<String> uniqueRuleIds = new HashSet<>();
 
-       return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(num);
+        sb.append(": ");
+        sb.append(subGroups);
+        sb.append(getValids());
+
+        return sb.toString();
+
     }
 }
